@@ -1,0 +1,42 @@
+---
+name: Test offline self-hosted runner
+on:
+  workflow_dispatch:
+    inputs:
+      foo:
+        description: "A sample input"
+        required: true
+        type: string
+      bar:
+        description: "Another sample input"
+        required: false
+        type: boolean
+      baz:
+        description: "Yet another sample input"
+        required: false
+        type: choice
+        options:
+          - option1
+          - option2
+          - option3
+      qux:
+        description: "A final sample input"
+        required: false
+        type: number
+
+jobs:
+  test-runner:
+    runs-on: self-hosted
+    steps:
+      - name: Echo foo
+        run: |
+          echo "Input foo is ${{ github.event.inputs.foo }}"
+          for i in {1..10}; do
+            if ping -c 1 4.2.2.2 &>/dev/null; then
+              echo "Network is up";
+            else
+              echo "Network is down";
+            fi
+            sleep 2
+          done
+          echo "Done testing network connectivity"
